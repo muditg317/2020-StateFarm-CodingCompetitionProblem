@@ -99,10 +99,12 @@ public class CodingCompCsvUtil {
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) {
 		List<Customer> allCustomers = readCsvFile(customerFilePath, Customer.class);
 		List<Customer> retainedCustomers = new ArrayList<>();
-		for (Customer current : )
-		Collections.sort(retainedCustomers, (o1, o2) -> {
-
-		});
+		for (Customer current : allCustomers) {
+			if (current.getYearsOfService() >= yearsOfService) {
+				retainedCustomers.add(current);
+			}
+		}
+		Collections.sort(retainedCustomers, Comparator.comparingInt(Customer::getTotalMonthlyPremium));
 		return retainedCustomers;
 	}
 
@@ -217,7 +219,7 @@ public class CodingCompCsvUtil {
 		Collections.sort(agentAverageRatings, (o1, o2) -> {
 			if (o1.getValue2() > o2.getValue2()) {
 				return 1;
-			} else if (o1.getValue2() > o2.getValue2()) {
+			} else if (o1.getValue2() < o2.getValue2()) {
 				return -1;
 			}
 			return 0;

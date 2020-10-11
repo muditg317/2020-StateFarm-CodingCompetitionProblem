@@ -328,7 +328,7 @@ public class Customer {
  		public static Builder newBuilder() {
  			return new Builder();
  		}
- 		
+
 		 public Builder customerId(int customerId) {
 			 this.customerId = customerId;
 			 return this;
