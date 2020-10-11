@@ -110,7 +110,7 @@ public class CodingCompCsvUtil {
 	 * @param yearsOfServeice -- Number of years the person has been a customer.
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
-	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) {
+	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) throws IOException {
 		List<Customer> allCustomers = readCsvFile(customerFilePath, Customer.class);
 		List<Customer> retainedCustomers = new ArrayList<>();
 		for (Customer current : allCustomers) {
@@ -129,7 +129,7 @@ public class CodingCompCsvUtil {
 	 * @param filePath -- Path to file being read in.
 	 * @return -- List of customers who’ve made an inquiry for a policy but have not signed up.
 	 */
-	public List<Customer> getLeadsForInsurance(String filePath) {
+	public List<Customer> getLeadsForInsurance(String filePath) throws IOException {
 		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
 		List<Customer> customersWithoutPolicy = new ArrayList<>();
 		for (Customer current : allCustomers) {
@@ -151,7 +151,7 @@ public class CodingCompCsvUtil {
 	 * @param vendorRating -- The rating of the vendor.
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
-	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) {
+	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) throws IOException {
 		List<Vendor> allVendors = readCsvFile(filePath, Vendor.class);
 		List<Vendor> narrowedVendors = new ArrayList<>();
 		for (Vendor current : allVendors) {
