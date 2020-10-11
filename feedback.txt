@@ -10,7 +10,17 @@ Document and describe any enhancements included to help the judges properly grad
 	Step 4: The Customer class was using a String for the totalMonthlyPremium because of a dollar sign, so we converted it to an int.
 	    This makes future use of the value much more intuitive and meaningful.
 	    We also updated the test values in the JUnit to reflect the better implementation.
-	Step 5:
+	Step 5: We improved the javadocs for all of the provided methods to make their use easier.
+	    We also generated the javadoc HTML for this project, so that they can be more easily referenced.
+	Step 6: We created 2 methods in the CsvUtil class that can be used to find other patterns in the data.
+	    We created getCustomersBasedOnNumberOfPolicies and getVendorsForCustomerBasedOnArea.
+	    We also created tests for these two methods.
+	Step 7: We implemented the Builder pattern for each of the data classes. Although unused for this implementation, builders are a very helpful design pattern to use when a constructor has many hard-to-remember parameters.
+	    If a user wanted to add functionality for creating objects and writing to CSV, rather than reading, the builder would prove very valuable for code readability/maintainability.
 	
 	
 Feedback for the coding competition?  Things you would like to see in future events?
+Some of the requirements in the javadocs wre a bit unclear.
+    For #5, we had to do customer.getYearsOfService() == yearsOfService
+    But for #7, we had to do vendor.getVendorRating() >= vendorRating
+    Whether or not we use > or == was a bit unclear and required us to guess as to why the tests failed.

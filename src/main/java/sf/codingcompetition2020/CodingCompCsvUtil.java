@@ -223,7 +223,7 @@ public class CodingCompCsvUtil {
         return readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customerIDsWithRecentClaim.contains(customer.getCustomerId())).collect(Collectors.toList());
   }
 
-  /* Custom methods: 1
+  /* Custom method #1
    * getCustomersBasedOnNumberOfPolicies() -- Return a list of customers who have <numberOfPolicies> policies (inclusive).
    * @param filePath -- Path to file being read in.
    * @param numberOfPolicies -- Number of months a policy has been open.
@@ -245,7 +245,7 @@ public class CodingCompCsvUtil {
     }).collect(Collectors.toList());
   }
 
-  /* Custom methods: 2
+  /* Custom methods #2
    * getVendorsForCustomerBasedOnArea() -- Return a list of vendors that operate in the area of a given customer.
    * @param csvFilePaths -- Paths to files being read in.
    * @param customerFirstName -- last name of customer
