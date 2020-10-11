@@ -68,7 +68,7 @@ public class CodingCompCsvUtilTest{
 	
 	//#5
 	@Test
-	public void getCustomersRetainedForYearsByPlcyCostAsc() {
+	public void getCustomersRetainedForYearsByPlcyCostAsc() throws IOException {
 		List<Customer> customerList = codingCompCsVUtil.getCustomersRetainedForYearsByPlcyCostAsc(customerFilePath, Short.valueOf("5"));
 		
 		assertEquals(15,customerList.size());
