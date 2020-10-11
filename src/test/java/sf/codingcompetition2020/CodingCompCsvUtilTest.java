@@ -120,6 +120,5 @@ public class CodingCompCsvUtilTest{
 		assertEquals(81,codingCompCsVUtil.getCustomersWithClaims(csvFilePaths, Short.valueOf("1")).size());
 		assertEquals(312,codingCompCsVUtil.getCustomersWithClaims(csvFilePaths, Short.valueOf("6")).size());
 		}
-
 }
 
