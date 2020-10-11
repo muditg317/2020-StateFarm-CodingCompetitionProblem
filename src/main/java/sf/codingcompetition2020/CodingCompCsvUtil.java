@@ -244,28 +244,13 @@ public class CodingCompCsvUtil {
 	/* Custom methods: 2
 	 * getVendorsForCustomerBasedOnArea() -- Return a list of vendors that operate in the area of a given customer.
 	 * @param csvFilePaths -- Paths to files being read in.
-	 * @param firstName -- last name of customer
-	 * @param lastName -- first name of customer
+	 * @param customerFirstName -- last name of customer
+	 * @param customerLastName -- first name of customer
 	 * @return -- list of vendors that operate in the area of a given customer
 	 */
-	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String firstName, String lastName) throws IOException {
-		String customerListFilePath = csvFilePaths.get("customerList");
-		String vendorListFilePath = csvFilePaths.get("vendorList");
-		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
-		List<Vendor> allVendors = readCsvFile(vendorListFilePath, Vendor.class);
-		String desiredArea = "";
-		List<Vendor> vendorsInArea = new ArrayList<>();
-		for (Customer current : allCustomers) {
-			if (current.getFirstName().equals(firstName) && current.getLastName().equals(lastName)) {
-				desiredArea = current.getArea();
-				break;
-			}
-		}
-		for (Vendor current : allVendors) {
-			if (current.getArea().equals(desiredArea)) {
-				vendorsInArea.add(current);
-			}
-		}
-		return vendorsInArea;
+	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String customerFirstName, String customerLastName) throws IOException {
+		String desiredArea = readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customer.getFirstName().equals(customerFirstName) && customer.getLastName().equals(customerLastName)).iterator().next().getArea();
+		return readCsvFile(csvFilePaths.get("vendorFilePath"), Vendor.class).stream().filter(vendor -> vendor.getArea().equals(desiredArea)).collect(Collectors.toList());
+
 	}
 }
