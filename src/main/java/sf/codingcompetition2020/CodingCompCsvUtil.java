@@ -97,7 +97,13 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) {
+		List<Customer> allCustomers = readCsvFile(customerFilePath, Customer.class);
+		List<Customer> retainedCustomers = new ArrayList<>();
+		for (Customer current : )
+		Collections.sort(retainedCustomers, (o1, o2) -> {
 
+		});
+		return retainedCustomers;
 	}
 
 	

@@ -20,7 +20,7 @@ public class Customer {
 	private boolean homePolicy;
 	private boolean autoPolicy;
 	private boolean rentersPolicy;
-	private String totalMonthlyPremium;
+	private int totalMonthlyPremium;
 	private short yearsOfService;
 	private Integer vehiclesInsured;
 
@@ -40,7 +40,7 @@ public class Customer {
 		this.homePolicy = homePolicy;
 		this.autoPolicy = autoPolicy;
 		this.rentersPolicy = rentersPolicy;
-		this.totalMonthlyPremium = totalMonthlyPremium;
+		this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 		this.yearsOfService = yearsOfService;
 		this.vehiclesInsured = vehiclesInsured;
 	}
@@ -264,7 +264,7 @@ public class Customer {
 	* Returns value of totalMonthlyPremium
 	* @return
 	*/
-	public String getTotalMonthlyPremium() {
+	public int getTotalMonthlyPremium() {
 		return totalMonthlyPremium;
 	}
 
@@ -273,7 +273,7 @@ public class Customer {
 	* @param
 	*/
 	public void setTotalMonthlyPremium(String totalMonthlyPremium) {
-		this.totalMonthlyPremium = totalMonthlyPremium;
+		this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 	}
 
 	/**
@@ -321,18 +321,14 @@ public class Customer {
 		 private boolean homePolicy;
 		 private boolean autoPolicy;
 		 private boolean rentersPolicy;
-		 private String totalMonthlyPremium;
+		 private int totalMonthlyPremium;
 		 private short yearsOfService;
 		 private Integer vehiclesInsured;
 
  		public static Builder newBuilder() {
  			return new Builder();
  		}
-
-
-		public static Builder newBuilder() {
-			return new Builder();
-		}
+ 		
 		 public Builder customerId(int customerId) {
 			 this.customerId = customerId;
 			 return this;
@@ -394,7 +390,7 @@ public class Customer {
 		}
 
 		 public Builder totalMonthlyPremium(String totalMonthlyPremium) {
-			 this.totalMonthlyPremium = totalMonthlyPremium;
+			 this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 			 return this;
 		}
 
