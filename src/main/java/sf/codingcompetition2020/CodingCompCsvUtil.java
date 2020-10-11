@@ -137,7 +137,17 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers filtered by age, number of vehicles insured and the number of dependents.
 	 */
 	public List<Customer> getUndisclosedDrivers(String filePath, int vehiclesInsured, int dependents) {
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		List<Customer> filteredCustomers = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (current.getAge() >= 40 && current.getAge() <= 50) {
+				if (current.getVehiclesInsured() > vehiclesInsured && current.getDependents().size() <= dependents) {
+					filteredCustomers.add(current);
+				}
+			}
 
+		}
+		return filteredCustomers;
 	}	
 
 
