@@ -26,6 +26,7 @@ import sf.codingcompetition2020.structures.Agent;
 import sf.codingcompetition2020.structures.Claim;
 import sf.codingcompetition2020.structures.Customer;
 import sf.codingcompetition2020.structures.Vendor;
+import sf.codingcompetition2020.utilities.Pair;
 
 public class CodingCompCsvUtil {
 	
@@ -154,16 +155,39 @@ public class CodingCompCsvUtil {
 		for (Customer currentCustomer : allCustomers) {
 			numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
 		}
-		int[] totalAgentRating = new int[numberOfAgents + 1];
-		int[] numberOfAgentReviews = new int[numberOfAgents + 1];
-		int[] agentIdNumbers = new int[numberOfAgents + 1];
-		for (int i = 0; i < agentIdNumbers.length; i++) {
-			agentIdNumbers[i] = i;
-		}
+		Map<Integer, List<Integer>> agentRatingsList = new HashMap<>();
 		for (Customer currentCustomer : allCustomers) {
-			totalAgentRating[]
+			int currentAgentId = currentCustomer.getAgentId();
+			int currentAgentRating = currentCustomer.getAgentRating();
+			if (agentRatingsList.containsKey(currentAgentId)) {
+				List<Integer> currentAgentList = agentRatingsList.get(currentAgentId);
+				currentAgentList.set(0, currentAgentList.get(0) + 1);
+				currentAgentList.set(1, currentAgentList.get(1) + currentAgentRating);
+				agentRatingsList.put(currentAgentId, currentAgentList);
+			} else {
+				List<Integer> newAgentList = new ArrayList<>();
+				newAgentList.add(1);
+				newAgentList.add(currentAgentRating);
+				agentRatingsList.put(currentAgentId, newAgentList);
+			}
 		}
-		return agentIdNumbers[agentRank - 1];
+		List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
+		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsList.entrySet()) {
+			Integer agentId = entry.getKey();
+			Integer numReviews = entry.getValue().get(0);
+			Integer totalRating = entry.getValue().get(1);
+			Double averageRating = (double)(totalRating) / numReviews;
+			agentAverageRatings.add(new Pair<>(agentId, averageRating));
+		}
+		Collections.sort(agentAverageRatings, (o1, o2) -> {
+			if (o1.getValue2() > o2.getValue2()) {
+				return 1;
+			} else if (o1.getValue2() > o2.getValue2()) {
+				return -1;
+			}
+			return 0;
+		});
+		return agentAverageRatings.get(agentRank - 1).getValue1();
 	}	
 
 	
@@ -178,7 +202,7 @@ public class CodingCompCsvUtil {
 		String claimsListFilePath = csvFilePaths.get("claimList");
 		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
 		List<Claim> allClaims = readCsvFile(claimsListFilePath, Claim.class);
-		List<Customer> customersWithClaims = new ArrayList<Customer>();
+		List<Customer> customersWithClaims = new ArrayList<>();
 		for (Claim currentClaim : allClaims) {
 			if (currentClaim.getMonthsOpen() <= monthsOpen) {
 				int currentClaimCustomerId = currentClaim.getCustomerId();
@@ -186,6 +210,5 @@ public class CodingCompCsvUtil {
 			}
 		}
 		return customersWithClaims;
-	}	
-
+	}
 }
