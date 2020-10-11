@@ -250,7 +250,7 @@ public class CodingCompCsvUtil {
 	 */
 	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String customerFirstName, String customerLastName) throws IOException {
 		String desiredArea = readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customer.getFirstName().equals(customerFirstName) && customer.getLastName().equals(customerLastName)).iterator().next().getArea();
-		return readCsvFile(csvFilePaths.get("vendorFilePath"), Vendor.class).stream().filter(vendor -> vendor.getArea().equals(desiredArea)).collect(Collectors.toList());
+		return readCsvFile(csvFilePaths.get("vendorList"), Vendor.class).stream().filter(vendor -> vendor.getArea().equals(desiredArea)).collect(Collectors.toList());
 
 	}
 }

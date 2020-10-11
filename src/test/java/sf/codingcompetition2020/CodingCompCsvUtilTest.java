@@ -1,6 +1,7 @@
 package sf.codingcompetition2020;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import sf.codingcompetition2020.structures.Agent;
 import sf.codingcompetition2020.structures.Claim;
 import sf.codingcompetition2020.structures.Customer;
+import sf.codingcompetition2020.structures.Vendor;
 
 public class CodingCompCsvUtilTest{
 	
@@ -134,9 +136,13 @@ public class CodingCompCsvUtilTest{
 		Map<String, String> csvFilePaths = new HashMap<>();
 		csvFilePaths.put(customerList, customerFilePath);
 		csvFilePaths.put(vendorList, vendorFilePath);
-		System.out.println(codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Alexine", "Spinella").toString());
-		System.out.println(codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Brandon", "Dwerryhouse").toString());
-		assertEquals(0, 1);
+		List<Vendor> result = codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Alexine", "Spinella");
+		
+		assertEquals(52, result.size());
+		assertEquals(1, result.get(0).getVendorId());
+		assertTrue(result.get(0).isInScope());
+		assertEquals("area-5", result.get(1).getArea());
+		assertEquals(5, result.get(1).getVendorRating());
 	}
 }
 
