@@ -188,32 +188,23 @@ public class CodingCompCsvUtil {
 				agentRatingsMap.put(currentAgentId, newAgentList);
 			}
 		}
-        return ((Pair<Integer, Double>) agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
-                    if (agent1.getValue2() > agent2.getValue2()) {
-                        return 1;
-                    } else if (agent1.getValue2() < agent2.getValue2()) {
-                        return -1;
-                    }
-                    return 0;
-                }).skip(agentRank-1).limit(1).toArray()[0]).getValue1();
-//
-//        List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
-//		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsMap.entrySet()) {
-//			Integer agentId = entry.getKey();
-//			Integer numReviews = entry.getValue().get(0);
-//			Integer totalRating = entry.getValue().get(1);
-//			Double averageRating = (double)(totalRating) / numReviews;
-//			agentAverageRatings.add(new Pair<>(agentId, averageRating));
-//		}
-//		Collections.sort(entryList, (o1, o2) -> {
-//			if (o1.getValue2() > o2.getValue2()) {
-//				return 1;
-//			} else if (o1.getValue2() < o2.getValue2()) {
-//				return -1;
-//			}
-//			return 0;
-//		});
-//		return agentAverageRatings.get(agentRank - 1).getValue1();
+        List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
+		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsMap.entrySet()) {
+			Integer agentId = entry.getKey();
+			Integer numReviews = entry.getValue().get(0);
+			Integer totalRating = entry.getValue().get(1);
+			Double averageRating = (double)(totalRating) / numReviews;
+			agentAverageRatings.add(new Pair<>(agentId, averageRating));
+		}
+		Collections.sort(agentAverageRatings, (o1, o2) -> {
+			if (o1.getValue2() < o2.getValue2()) {
+				return 1;
+			} else if (o1.getValue2() > o2.getValue2()) {
+				return -1;
+			}
+			return 0;
+		});
+		return agentAverageRatings.get(agentRank - 1).getValue1();
 	}	
 
 	
@@ -259,7 +250,7 @@ public class CodingCompCsvUtil {
 	 */
 	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String firstName, String lastName) throws IOException {
 		String customerListFilePath = csvFilePaths.get("customerList");
-		String vendorListFilePath = csvFilePaths.get("vendorFilePath");
+		String vendorListFilePath = csvFilePaths.get("vendorList");
 		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
 		List<Vendor> allVendors = readCsvFile(vendorListFilePath, Vendor.class);
 		String desiredArea = "";

@@ -22,6 +22,7 @@ public class CodingCompCsvUtilTest{
 	private final String agentList = "agentList";
 	private final String claimList = "claimList";
 	private final String customerList = "customerList";
+	private final String vendorList = "vendorList";
 	
 	
 	CodingCompCsvUtil codingCompCsVUtil = new CodingCompCsvUtil();
@@ -119,6 +120,23 @@ public class CodingCompCsvUtilTest{
 			
 		assertEquals(81,codingCompCsVUtil.getCustomersWithClaims(csvFilePaths, Short.valueOf("1")).size());
 		assertEquals(312,codingCompCsVUtil.getCustomersWithClaims(csvFilePaths, Short.valueOf("6")).size());
-		}
+	}
+
+	//#Custom 1
+	@Test
+	public void getCustomersBasedOnNumberOfPolicies() throws IOException {
+		assertEquals(195, codingCompCsVUtil.getCustomersBasedOnNumberOfPolicies(customerFilePath, Integer.valueOf("1")).size());
+		assertEquals(40, codingCompCsVUtil.getCustomersBasedOnNumberOfPolicies(customerFilePath, Integer.valueOf("3")).size());
+	}
+
+	@Test
+	public void getVendorsForCustomerBasedOnArea() throws IOException {
+		Map<String, String> csvFilePaths = new HashMap<>();
+		csvFilePaths.put(customerList, customerFilePath);
+		csvFilePaths.put(vendorList, vendorFilePath);
+		System.out.println(codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Alexine", "Spinella").toString());
+		System.out.println(codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Brandon", "Dwerryhouse").toString());
+		assertEquals(0, 1);
+	}
 }
 
