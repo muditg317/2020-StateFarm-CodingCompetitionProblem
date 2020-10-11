@@ -123,7 +123,20 @@ public class CodingCompCsvUtil {
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
 	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) {
-
+		List<Vendor> allVendors = readCsvFile(filePath, Vendor.class);
+		List<Vendor> narrowedVendors = new ArrayList<>();
+		for (Vendor current : allVendors) {
+			if (current.getVendorRating() == vendorRating && area.equals(current.getArea())) {
+				if (inScope) {
+					if (current.isInScope()) {
+						narrowedVendors.add(current);
+					}
+				} else {
+					narrowedVendors.add(current);
+				}
+			}
+		}
+		return narrowedVendors;
 	}
 
 
@@ -145,7 +158,6 @@ public class CodingCompCsvUtil {
 					filteredCustomers.add(current);
 				}
 			}
-
 		}
 		return filteredCustomers;
 	}	
