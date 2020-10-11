@@ -2,6 +2,7 @@ package sf.codingcompetition2020;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 import sf.codingcompetition2020.structures.Agent;
@@ -38,19 +40,31 @@ public class CodingCompCsvUtil {
 	 * @return -- List of entries being returned.
 	 */
 	public <T> List<T> readCsvFile(String filePath, Class<T> classType) throws IOException {
-		File file = new File(filePath);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		String entry;
 		List<T> interpretedFile = new ArrayList<>();
-		while ((entry = br.readLine()) != null) {
-			List<String> interpretedLine = Arrays.asList(entry.split("\\s*,\\s*"));
+
+		File csvFile = new File(filePath);
+		CsvMapper mapper = new CsvMapper();
+		mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
+		MappingIterator<Object[]> it = mapper.readerFor(Object[].class).readValues(csvFile);
+		it.forEachRemaining(row -> {
 			try {
-				interpretedFile.add(classType.getConstructor(List.class).newInstance());
-			} catch (NoSuchMethodException nsme) {
-				nsme.printStackTrace();
+				interpretedFile.add(classType.getConstructor(List.class).newInstance(Arrays.asList(row)));
+			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
 			}
-		}
+		});
+
+//		FileReader fr = new FileReader(csvFile);
+//		BufferedReader br = new BufferedReader(fr);
+//		String entry;
+//		while ((entry = br.readLine()) != null) {
+//			List<String> interpretedLine = Arrays.asList(entry.split("\\s*,\\s*"));
+//			try {
+//				interpretedFile.add(classType.getConstructor(List.class).newInstance(interpretedLine));
+//			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		return interpretedFile;
 	}
 
@@ -62,7 +76,7 @@ public class CodingCompCsvUtil {
 	 * @return -- The number of agents in a given area
 	 */
 	public int getAgentCountInArea(String filePath, String area) {
-
+		return -1;
 	}
 
 	
@@ -74,7 +88,7 @@ public class CodingCompCsvUtil {
 	 * @return -- The number of agents in a given area
 	 */
 	public List<Agent> getAgentsInAreaThatSpeakLanguage(String filePath, String area, String language) {
-
+		return null;
 	}
 	
 	
@@ -87,7 +101,7 @@ public class CodingCompCsvUtil {
 	 * @return -- The number of customers that use a certain agent in a given area.
 	 */
 	public short countCustomersFromAreaThatUseAgent(Map<String,String> csvFilePaths, String customerArea, String agentFirstName, String agentLastName) {
-		
+		return -1;
 	}
 
 	
@@ -98,7 +112,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) {
-
+		return null;
 	}
 
 	
@@ -109,7 +123,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers who’ve made an inquiry for a policy but have not signed up.
 	 */
 	public List<Customer> getLeadsForInsurance(String filePath) {
-
+		return null;
 	}
 
 

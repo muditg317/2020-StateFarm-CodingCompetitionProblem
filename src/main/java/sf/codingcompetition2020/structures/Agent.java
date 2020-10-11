@@ -1,5 +1,7 @@
 package sf.codingcompetition2020.structures;
 
+import java.util.List;
+
 public class Agent {
 
 	private int agentId;
@@ -17,6 +19,19 @@ public class Agent {
 		this.language = language;
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+
+	/**
+	 * constructor based on an entry in a CSV
+	 * @param csvEntry
+	 */
+	public Agent(List<String> csvEntry) {
+		this(
+				Integer.parseInt(csvEntry.get(0)),
+				csvEntry.get(1),
+				csvEntry.get(2),
+				csvEntry.get(3),
+				csvEntry.get(4));
 	}
 
 	/**

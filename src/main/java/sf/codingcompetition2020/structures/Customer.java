@@ -22,12 +22,12 @@ public class Customer {
 	private boolean rentersPolicy;
 	private String totalMonthlyPremium;
 	private short yearsOfService;
-	private Integer vehiclesInsured;
+	private int vehiclesInsured;
 
 	/**
 	* Default Customer constructor
 	*/
-	public Customer(int customerId, String firstName, String lastName, int age, String area, int agentId, short agentRating, String primaryLanguage, List<Dependent> dependents, boolean homePolicy, boolean autoPolicy, boolean rentersPolicy, String totalMonthlyPremium, short yearsOfService, Integer vehiclesInsured) {
+	public Customer(int customerId, String firstName, String lastName, int age, String area, int agentId, short agentRating, String primaryLanguage, List<Dependent> dependents, boolean homePolicy, boolean autoPolicy, boolean rentersPolicy, String totalMonthlyPremium, short yearsOfService, int vehiclesInsured) {
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -43,6 +43,30 @@ public class Customer {
 		this.totalMonthlyPremium = totalMonthlyPremium;
 		this.yearsOfService = yearsOfService;
 		this.vehiclesInsured = vehiclesInsured;
+	}
+
+	/**
+	 * constructor based on an entry in a CSV
+	 * @param csvEntry
+	 */
+	public Customer(List<String> csvEntry) {
+		this(
+				Integer.parseInt(csvEntry.get(0)),
+				csvEntry.get(1),
+				csvEntry.get(2),
+				Integer.parseInt(csvEntry.get(3)),
+				csvEntry.get(4),
+				Integer.parseInt(csvEntry.get(5)),
+				Short.parseShort(csvEntry.get(6)),
+				csvEntry.get(7),
+				(List<Dependent>)(Object)csvEntry.get(8),
+				Boolean.parseBoolean(csvEntry.get(9)),
+				Boolean.parseBoolean(csvEntry.get(10)),
+				Boolean.parseBoolean(csvEntry.get(11)),
+				csvEntry.get(12),
+				Short.parseShort(csvEntry.get(13)),
+				Integer.parseInt(csvEntry.get(14))
+				);
 	}
 
 	/**
@@ -296,7 +320,7 @@ public class Customer {
 	* Returns value of vehiclesInsured
 	* @return
 	*/
-	public Integer getVehiclesInsured() {
+	public int getVehiclesInsured() {
 		return vehiclesInsured;
 	}
 
@@ -304,7 +328,7 @@ public class Customer {
 	* Sets new value of vehiclesInsured
 	* @param
 	*/
-	public void setVehiclesInsured(Integer vehiclesInsured) {
+	public void setVehiclesInsured(int vehiclesInsured) {
 		this.vehiclesInsured = vehiclesInsured;
 	}
 
@@ -323,16 +347,12 @@ public class Customer {
 		 private boolean rentersPolicy;
 		 private String totalMonthlyPremium;
 		 private short yearsOfService;
-		 private Integer vehiclesInsured;
+		 private int vehiclesInsured;
 
  		public static Builder newBuilder() {
  			return new Builder();
  		}
 
-
-		public static Builder newBuilder() {
-			return new Builder();
-		}
 		 public Builder customerId(int customerId) {
 			 this.customerId = customerId;
 			 return this;
@@ -403,7 +423,7 @@ public class Customer {
 			 return this;
 		}
 
-		 public Builder vehiclesInsured(Integer vehiclesInsured) {
+		 public Builder vehiclesInsured(int vehiclesInsured) {
 			 this.vehiclesInsured = vehiclesInsured;
 			 return this;
 		}

@@ -1,5 +1,7 @@
 package sf.codingcompetition2020.structures;
 
+import java.util.List;
+
 public class Claim {
 	private int claimId;
 	private int customerId;
@@ -14,6 +16,18 @@ public class Claim {
 		this.customerId = customerId;
 		this.closed = closed;
 		this.monthsOpen = monthsOpen;
+	}
+
+	/**
+	 * constructor based on an entry in a CSV
+	 * @param csvEntry
+	 */
+	public Claim(List<String> csvEntry) {
+		this(
+				Integer.parseInt(csvEntry.get(0)),
+				Integer.parseInt(csvEntry.get(1)),
+				Boolean.parseBoolean(csvEntry.get(2)),
+				Integer.parseInt(csvEntry.get(3)));
 	}
 
 	/**
