@@ -137,7 +137,7 @@ public class CodingCompCsvUtilTest{
 		csvFilePaths.put(customerList, customerFilePath);
 		csvFilePaths.put(vendorList, vendorFilePath);
 		List<Vendor> result = codingCompCsVUtil.getVendorsForCustomerBasedOnArea(csvFilePaths, "Alexine", "Spinella");
-		
+
 		assertEquals(52, result.size());
 		assertEquals(1, result.get(0).getVendorId());
 		assertTrue(result.get(0).isInScope());
