@@ -2,10 +2,8 @@ package sf.codingcompetition2020;
 
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -130,7 +128,21 @@ public class CodingCompCsvUtil {
 	 * @return -- Agent ID of agent with the given rank.
 	 */
 	public int getAgentIdGivenRank(String filePath, int agentRank) {
-			
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		int numberOfAgents = Integer.MIN_VALUE;
+		for (Customer currentCustomer : allCustomers) {
+			numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
+		}
+		int[] totalAgentRating = new int[numberOfAgents + 1];
+		int[] numberOfAgentReviews = new int[numberOfAgents + 1];
+		int[] agentIdNumbers = new int[numberOfAgents + 1];
+		for (int i = 0; i < agentIdNumbers.length; i++) {
+			agentIdNumbers[i] = i;
+		}
+		for (Customer currentCustomer : allCustomers) {
+			totalAgentRating[]
+		}
+		return agentIdNumbers[agentRank - 1];
 	}	
 
 	
@@ -140,8 +152,19 @@ public class CodingCompCsvUtil {
 	 * @param monthsOpen -- Number of months a policy has been open.
 	 * @return -- List of customers who’ve filed a claim within the last <numberOfMonths>.
 	 */
-	public List<Customer> getCustomersWithClaims(Map<String,String> csvFilePaths, short monthsOpen) {
-
+	public List<Customer> getCustomersWithClaims(Map<String, String> csvFilePaths, short monthsOpen) {
+		String customerListFilePath = csvFilePaths.get("customerList");
+		String claimsListFilePath = csvFilePaths.get("claimList");
+		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
+		List<Claim> allClaims = readCsvFile(claimsListFilePath, Claim.class);
+		List<Customer> customersWithClaims = new ArrayList<Customer>();
+		for (Claim currentClaim : allClaims) {
+			if (currentClaim.getMonthsOpen() <= monthsOpen) {
+				int currentClaimCustomerId = currentClaim.getCustomerId();
+				customersWithClaims.add(allCustomers.get(currentClaimCustomerId));
+			}
+		}
+		return customersWithClaims;
 	}	
 
 }
