@@ -108,7 +108,14 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers who’ve made an inquiry for a policy but have not signed up.
 	 */
 	public List<Customer> getLeadsForInsurance(String filePath) {
-
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		List<Customer> customersWithoutPolicy = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (!current.hasAutoPolicy() && !current.hasHomePolicy() && !current.hasRentersPolicy()) {
+				customersWithoutPolicy.add(current);
+			}
+		}
+		return customersWithoutPolicy;
 	}
 
 

@@ -216,7 +216,7 @@ public class Customer {
 	* Returns value of homePolicy
 	* @return
 	*/
-	public boolean isHomePolicy() {
+	public boolean hasHomePolicy() {
 		return homePolicy;
 	}
 
@@ -232,7 +232,7 @@ public class Customer {
 	* Returns value of autoPolicy
 	* @return
 	*/
-	public boolean isAutoPolicy() {
+	public boolean hasAutoPolicy() {
 		return autoPolicy;
 	}
 
@@ -248,7 +248,7 @@ public class Customer {
 	* Returns value of rentersPolicy
 	* @return
 	*/
-	public boolean isRentersPolicy() {
+	public boolean hasRentersPolicy() {
 		return rentersPolicy;
 	}
 
