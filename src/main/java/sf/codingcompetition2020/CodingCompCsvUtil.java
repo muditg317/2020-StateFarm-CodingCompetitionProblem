@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -161,71 +162,54 @@ public class CodingCompCsvUtil {
   }
 
 
-  /* #9
-   * getAgentIdGivenRank() -- Return the agent with the given rank based on average customer satisfaction rating.
-   * *HINT* -- Rating is calculated by taking all the agent rating by customers (1-5 scale) and dividing by the total number
-   * of reviews for the agent.
-   * @param filePath -- Path to file being read in.
-   * @param agentRank -- The rank of the agent being requested.
-   * @return -- Agent ID of agent with the given rank.
-   */
-  public int getAgentIdGivenRank(String filePath, int agentRank) throws IOException {
-    List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
-    int numberOfAgents = Integer.MIN_VALUE;
-    for (Customer currentCustomer : allCustomers) {
-      numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
-    }
-    Map<Integer, List<Integer>> agentRatingsMap = new HashMap<>();
-    for (Customer currentCustomer : allCustomers) {
-      int currentAgentId = currentCustomer.getAgentId();
-      int currentAgentRating = currentCustomer.getAgentRating();
-      if (agentRatingsMap.containsKey(currentAgentId)) {
-        List<Integer> currentAgentList = agentRatingsMap.get(currentAgentId);
-        currentAgentList.set(0, currentAgentList.get(0) + 1);
-        currentAgentList.set(1, currentAgentList.get(1) + currentAgentRating);
-        agentRatingsMap.put(currentAgentId, currentAgentList);
-      } else {
-        List<Integer> newAgentList = new ArrayList<>();
-        newAgentList.add(1);
-        newAgentList.add(currentAgentRating);
-        agentRatingsMap.put(currentAgentId, newAgentList);
-      }
-    }
-    System.out.println(agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
-      if (agent1.getValue2() > agent2.getValue2()) {
-        return 1;
-      } else if (agent1.getValue2() < agent2.getValue2()) {
-        return -1;
-      }
-      return 0;
-    }).collect(Collectors.toList()));
-        return ((Pair<Integer, Double>) agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
-                    if (agent1.getValue2() > agent2.getValue2()) {
-                        return 1;
-                    } else if (agent1.getValue2() < agent2.getValue2()) {
-                        return -1;
-                    }
-                    return 0;
-                }).skip(agentRank-1).limit(1).toArray()[0]).getValue1();
-//
-//        List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
-//    for (Map.Entry<Integer, List<Integer>> entry : agentRatingsMap.entrySet()) {
-//      Integer agentId = entry.getKey();
-//      Integer numReviews = entry.getValue().get(0);
-//      Integer totalRating = entry.getValue().get(1);
-//      Double averageRating = (double)(totalRating) / numReviews;
-//      agentAverageRatings.add(new Pair<>(agentId, averageRating));
-//    }
-//    Collections.sort(entryList, (o1, o2) -> {
-//      if (o1.getValue2() > o2.getValue2()) {
-//        return 1;
-//      } else if (o1.getValue2() < o2.getValue2()) {
-//        return -1;
-//      }
-//      return 0;
-//    });
-//    return agentAverageRatings.get(agentRank - 1).getValue1();
-  }
+	/* #9
+	 * getAgentIdGivenRank() -- Return the agent with the given rank based on average customer satisfaction rating. 
+	 * *HINT* -- Rating is calculated by taking all the agent rating by customers (1-5 scale) and dividing by the total number 
+	 * of reviews for the agent.
+	 * @param filePath -- Path to file being read in.
+	 * @param agentRank -- The rank of the agent being requested.
+	 * @return -- Agent ID of agent with the given rank.
+	 */
+	public int getAgentIdGivenRank(String filePath, int agentRank) throws IOException {
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		int numberOfAgents = Integer.MIN_VALUE;
+		for (Customer currentCustomer : allCustomers) {
+			numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
+		}
+		Map<Integer, List<Integer>> agentRatingsMap = new HashMap<>();
+		for (Customer currentCustomer : allCustomers) {
+			int currentAgentId = currentCustomer.getAgentId();
+			int currentAgentRating = currentCustomer.getAgentRating();
+			if (agentRatingsMap.containsKey(currentAgentId)) {
+				List<Integer> currentAgentList = agentRatingsMap.get(currentAgentId);
+				currentAgentList.set(0, currentAgentList.get(0) + 1);
+				currentAgentList.set(1, currentAgentList.get(1) + currentAgentRating);
+				agentRatingsMap.put(currentAgentId, currentAgentList);
+			} else {
+				List<Integer> newAgentList = new ArrayList<>();
+				newAgentList.add(1);
+				newAgentList.add(currentAgentRating);
+				agentRatingsMap.put(currentAgentId, newAgentList);
+			}
+		}
+        List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
+		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsMap.entrySet()) {
+			Integer agentId = entry.getKey();
+			Integer numReviews = entry.getValue().get(0);
+			Integer totalRating = entry.getValue().get(1);
+			Double averageRating = (double)(totalRating) / numReviews;
+			agentAverageRatings.add(new Pair<>(agentId, averageRating));
+		}
+		Collections.sort(agentAverageRatings, (o1, o2) -> {
+			if (o1.getValue2() < o2.getValue2()) {
+				return 1;
+			} else if (o1.getValue2() > o2.getValue2()) {
+				return -1;
+			}
+			return 0;
+		});
+		return agentAverageRatings.get(agentRank - 1).getValue1();
+	}	
 
 
   /* #10
