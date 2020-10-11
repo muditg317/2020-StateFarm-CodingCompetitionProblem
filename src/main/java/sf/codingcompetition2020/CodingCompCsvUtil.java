@@ -2,16 +2,9 @@ package sf.codingcompetition2020;
 
 import java.io.FileReader;
 import java.io.Reader;
-<<<<<<< HEAD
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-=======
-import java.lang.reflect.Array;
 import java.util.*;
->>>>>>> 4a61fb87fd49a14462182806e1412956997e44c9
+import java.lang.reflect.Array;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -21,7 +14,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -144,7 +136,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
 	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) {
-
+        return null;
 	}
 
 
@@ -157,7 +149,7 @@ public class CodingCompCsvUtil {
 	 * @param dependents -- The number of dependents on the insurance policy.
 	 * @return -- List of customers filtered by age, number of vehicles insured and the number of dependents.
 	 */
-	public List<Customer> getUndisclosedDrivers(String filePath, int vehiclesInsured, int dependents) {
+	public List<Customer> getUndisclosedDrivers(String filePath, int vehiclesInsured, int dependents) throws IOException {
 		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
 		List<Customer> filteredCustomers = new ArrayList<>();
 		for (Customer current : allCustomers) {
@@ -180,7 +172,7 @@ public class CodingCompCsvUtil {
 	 * @param agentRank -- The rank of the agent being requested.
 	 * @return -- Agent ID of agent with the given rank.
 	 */
-	public int getAgentIdGivenRank(String filePath, int agentRank) {
+	public int getAgentIdGivenRank(String filePath, int agentRank) throws IOException {
 		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
 		int numberOfAgents = Integer.MIN_VALUE;
 		for (Customer currentCustomer : allCustomers) {
@@ -228,7 +220,7 @@ public class CodingCompCsvUtil {
 	 * @param monthsOpen -- Number of months a policy has been open.
 	 * @return -- List of customers who’ve filed a claim within the last <numberOfMonths>.
 	 */
-	public List<Customer> getCustomersWithClaims(Map<String, String> csvFilePaths, short monthsOpen) {
+	public List<Customer> getCustomersWithClaims(Map<String, String> csvFilePaths, short monthsOpen) throws IOException {
 		String customerListFilePath = csvFilePaths.get("customerList");
 		String claimsListFilePath = csvFilePaths.get("claimList");
 		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
