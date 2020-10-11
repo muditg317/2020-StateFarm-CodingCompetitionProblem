@@ -248,4 +248,26 @@ public class CodingCompCsvUtil {
 		}
 		return customersWithClaims;
 	}
+
+	/* Custom methods: 1
+	 * getCustomersWithClaims() -- Return a list of customers who have <numberOfPolicies> policies (inclusive).
+	 * @param filePath -- Path to file being read in.
+	 * @param numberOfPolicies -- Number of months a policy has been open.
+	 * @return -- List of customers who have <numberOfPolicies> policies.
+	 */
+	public List<Customer> getCustomersBasedOnNumberOfPolicies(String filePath, int numberOfPolicies) {
+		return readCsvFile(filePath, Customer.class).stream().filter(customer -> {
+			int policyCount = 0;
+			if (customer.hasAutoPolicy()) {
+				policyCount++;
+			}
+			if (customer.hasHomePolicy()) {
+				policyCount++;
+			}
+			if (customer.hasRentersPolicy()) {
+				policyCount++;
+			}
+			return policyCount == numberOfPolicies;
+		}).collect(Collectors.toList());
+	}
 }
