@@ -2,6 +2,7 @@ package sf.codingcompetition2020;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class CodingCompCsvUtilTest{
 	
 	//#1
 	@Test
-	public void test1() {
+	public void test1() throws IOException {
 		assertEquals("Giacopo",((Agent)codingCompCsVUtil.readCsvFile(agentFilePath, Agent.class).get(1)).getFirstName());
 		assertEquals(424, ((Claim)codingCompCsVUtil.readCsvFile(claimFilePath, Claim.class).get(423)).getClaimId());
 		assertEquals("Lorin", ((Customer)codingCompCsVUtil.readCsvFile(customerFilePath, Customer.class).get(499)).getFirstName());
@@ -35,14 +36,14 @@ public class CodingCompCsvUtilTest{
 	
 	//#2
 	@Test
-	public void getAgentCountInArea() {
+	public void getAgentCountInArea() throws IOException {
 		assertEquals(247,codingCompCsVUtil.getAgentCountInArea(agentFilePath, "area-4"));
 		assertEquals(55,codingCompCsVUtil.getAgentCountInArea(agentFilePath, "area-2"));
 	}
 	
 	//#3
 	@Test
-	public void getAgentsInAreaThatSpeakLanguage() {
+	public void getAgentsInAreaThatSpeakLanguage() throws IOException {
 		List<Agent> agentList = codingCompCsVUtil.getAgentsInAreaThatSpeakLanguage(agentFilePath, "area-3", "English");
 		assertEquals(2, agentList.size());
 		assertEquals(49, agentList.get(0).getAgentId());
@@ -55,7 +56,7 @@ public class CodingCompCsvUtilTest{
 	
 	//#4
 	@Test
-	public void countCustomersFromCitythatUseAgent() {
+	public void countCustomersFromCitythatUseAgent() throws IOException {
 		Map<String, String> csvFilePaths = new HashMap<>();
 		
 		csvFilePaths.put(agentList, agentFilePath);
@@ -95,14 +96,14 @@ public class CodingCompCsvUtilTest{
 	
 	//#8
 	@Test
-	public void getCustomersRetainedForYearsByPlcyCostAsc2() {		
+	public void getCustomersRetainedForYearsByPlcyCostAsc2() throws IOException {
 		assertEquals(15,codingCompCsVUtil.getUndisclosedDrivers(customerFilePath,2,2).size());
 		assertEquals(14,codingCompCsVUtil.getUndisclosedDrivers(customerFilePath,3,3).size());
 	}
 	
 	//#9
 	@Test
-	public void getAgentIdGivenRank() {		
+	public void getAgentIdGivenRank() throws IOException {
 		assertEquals(3,codingCompCsVUtil.getAgentIdGivenRank(customerFilePath, 1));
 		assertEquals(12,codingCompCsVUtil.getAgentIdGivenRank(customerFilePath, 4));
 		assertEquals(14,codingCompCsVUtil.getAgentIdGivenRank(customerFilePath, 20));
@@ -110,7 +111,7 @@ public class CodingCompCsvUtilTest{
 	
 	//#10
 	@Test
-	public void getCountCustomersWithClaims() {
+	public void getCountCustomersWithClaims() throws IOException {
 		Map<String, String> csvFilePaths = new HashMap<>();
 		
 		csvFilePaths.put(customerList, customerFilePath);

@@ -73,8 +73,8 @@ public class CodingCompCsvUtil {
 	 * @param area -- The area from which the agents should be counted.
 	 * @return -- The number of agents in a given area
 	 */
-	public int getAgentCountInArea(String filePath, String area) {
-		return -1;
+	public int getAgentCountInArea(String filePath, String area) throws IOException {
+		return (int) readCsvFile(filePath, Agent.class).stream().filter(agent -> agent.getArea().equals(area)).count();
 	}
 
 	
@@ -85,8 +85,8 @@ public class CodingCompCsvUtil {
 	 * @param language -- The language spoken by the agent(s).
 	 * @return -- The number of agents in a given area
 	 */
-	public List<Agent> getAgentsInAreaThatSpeakLanguage(String filePath, String area, String language) {
-		return null;
+	public List<Agent> getAgentsInAreaThatSpeakLanguage(String filePath, String area, String language) throws IOException {
+		return readCsvFile(filePath, Agent.class).stream().filter(agent -> agent.getArea().equals(area) && agent.getLanguage().equals(language)).collect(Collectors.toList());
 	}
 	
 	
@@ -98,8 +98,9 @@ public class CodingCompCsvUtil {
 	 * @param agentLastName -- Last name of agent.
 	 * @return -- The number of customers that use a certain agent in a given area.
 	 */
-	public short countCustomersFromAreaThatUseAgent(Map<String,String> csvFilePaths, String customerArea, String agentFirstName, String agentLastName) {
-		return -1;
+	public short countCustomersFromAreaThatUseAgent(Map<String,String> csvFilePaths, String customerArea, String agentFirstName, String agentLastName) throws IOException {
+	    Agent desiredAgent = (Agent) readCsvFile(csvFilePaths.get("agentList"), Agent.class).stream().filter(agent -> agent.getFirstName().equals(agentFirstName) && agent.getLanguage().equals(agentLastName)).toArray()[0];
+		return (short) readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customer.getArea().equals(customerArea) && customer.getAgentId() == desiredAgent.getAgentId()).count();
 	}
 
 	

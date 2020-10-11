@@ -7,7 +7,8 @@ Document and describe any enhancements included to help the judges properly grad
 	    If a file is not found, is does not make sense to just return an empty list, as we should instead tell the user that they are attempting to read a non-present file.
 	    We also changed some of the tests to throw the IOException.
 	Step 3: We noticed that the vehiclesInsured field was unnecessarily declared as an Integer in the Customer class, so we converted it to an int.
-	Step 4:
+	Step 4: The Customer class was using a String for the totalMonthlyPremium because of a dollar sign, so we converted it to an int.
+	    This makes future use of the value much more intuitive and meaningful.
 	
 	
 Feedback for the coding competition?  Things you would like to see in future events?
