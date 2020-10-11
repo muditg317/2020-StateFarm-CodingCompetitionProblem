@@ -114,15 +114,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) throws IOException {
-		List<Customer> allCustomers = readCsvFile(customerFilePath, Customer.class);
-		List<Customer> retainedCustomers = new ArrayList<>();
-		for (Customer current : allCustomers) {
-			if (current.getYearsOfService() >= yearsOfService) {
-				retainedCustomers.add(current);
-			}
-		}
-		Collections.sort(retainedCustomers, Comparator.comparingInt(Customer::getTotalMonthlyPremium));
-		return retainedCustomers;
+		return readCsvFile(customerFilePath, Customer.class).stream().filter(customer -> customer.getYearsOfService() >= yearsOfService).sorted(Comparator.comparingInt(Customer::getTotalMonthlyPremium)).collect(Collectors.toList());
 	}
 
 	
@@ -133,14 +125,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers who’ve made an inquiry for a policy but have not signed up.
 	 */
 	public List<Customer> getLeadsForInsurance(String filePath) throws IOException {
-		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
-		List<Customer> customersWithoutPolicy = new ArrayList<>();
-		for (Customer current : allCustomers) {
-			if (!current.hasAutoPolicy() && !current.hasHomePolicy() && !current.hasRentersPolicy()) {
-				customersWithoutPolicy.add(current);
-			}
-		}
-		return customersWithoutPolicy;
+		return readCsvFile(filePath, Customer.class).stream().filter(customer -> !customer.hasAutoPolicy() && !customer.hasHomePolicy() && !customer.hasRentersPolicy()).collect(Collectors.toList());
 	}
 
 
@@ -155,20 +140,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
 	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) throws IOException {
-		List<Vendor> allVendors = readCsvFile(filePath, Vendor.class);
-		List<Vendor> narrowedVendors = new ArrayList<>();
-		for (Vendor current : allVendors) {
-			if (current.getVendorRating() == vendorRating && area.equals(current.getArea())) {
-				if (inScope) {
-					if (current.isInScope()) {
-						narrowedVendors.add(current);
-					}
-				} else {
-					narrowedVendors.add(current);
-				}
-			}
-		}
-		return narrowedVendors;
+		return readCsvFile(filePath, Vendor.class).stream().filter(vendor -> vendor.getVendorRating() == vendorRating && vendor.getArea().equals(area) && (!inScope || vendor.isInScope())).collect(Collectors.toList());
 	}
 
 
@@ -182,16 +154,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers filtered by age, number of vehicles insured and the number of dependents.
 	 */
 	public List<Customer> getUndisclosedDrivers(String filePath, int vehiclesInsured, int dependents) throws IOException {
-		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
-		List<Customer> filteredCustomers = new ArrayList<>();
-		for (Customer current : allCustomers) {
-			if (current.getAge() >= 40 && current.getAge() <= 50) {
-				if (current.getVehiclesInsured() > vehiclesInsured && current.getDependents().size() <= dependents) {
-					filteredCustomers.add(current);
-				}
-			}
-		}
-		return filteredCustomers;
+		return readCsvFile(filePath, Customer.class).stream().filter(customer -> customer.getAge() >= 40 && customer.getAge() <= 50 && customer.getVehiclesInsured() > vehiclesInsured && customer.getDependents().size() <= dependents).collect(Collectors.toList());
 	}	
 
 
@@ -209,39 +172,48 @@ public class CodingCompCsvUtil {
 		for (Customer currentCustomer : allCustomers) {
 			numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
 		}
-		Map<Integer, List<Integer>> agentRatingsList = new HashMap<>();
+		Map<Integer, List<Integer>> agentRatingsMap = new HashMap<>();
 		for (Customer currentCustomer : allCustomers) {
 			int currentAgentId = currentCustomer.getAgentId();
 			int currentAgentRating = currentCustomer.getAgentRating();
-			if (agentRatingsList.containsKey(currentAgentId)) {
-				List<Integer> currentAgentList = agentRatingsList.get(currentAgentId);
+			if (agentRatingsMap.containsKey(currentAgentId)) {
+				List<Integer> currentAgentList = agentRatingsMap.get(currentAgentId);
 				currentAgentList.set(0, currentAgentList.get(0) + 1);
 				currentAgentList.set(1, currentAgentList.get(1) + currentAgentRating);
-				agentRatingsList.put(currentAgentId, currentAgentList);
+				agentRatingsMap.put(currentAgentId, currentAgentList);
 			} else {
 				List<Integer> newAgentList = new ArrayList<>();
 				newAgentList.add(1);
 				newAgentList.add(currentAgentRating);
-				agentRatingsList.put(currentAgentId, newAgentList);
+				agentRatingsMap.put(currentAgentId, newAgentList);
 			}
 		}
-		List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
-		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsList.entrySet()) {
-			Integer agentId = entry.getKey();
-			Integer numReviews = entry.getValue().get(0);
-			Integer totalRating = entry.getValue().get(1);
-			Double averageRating = (double)(totalRating) / numReviews;
-			agentAverageRatings.add(new Pair<>(agentId, averageRating));
-		}
-		Collections.sort(agentAverageRatings, (o1, o2) -> {
-			if (o1.getValue2() > o2.getValue2()) {
-				return 1;
-			} else if (o1.getValue2() < o2.getValue2()) {
-				return -1;
-			}
-			return 0;
-		});
-		return agentAverageRatings.get(agentRank - 1).getValue1();
+        return ((Pair<Integer, Double>) agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
+                    if (agent1.getValue2() > agent2.getValue2()) {
+                        return 1;
+                    } else if (agent1.getValue2() < agent2.getValue2()) {
+                        return -1;
+                    }
+                    return 0;
+                }).skip(agentRank-1).limit(1).toArray()[0]).getValue1();
+//
+//        List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
+//		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsMap.entrySet()) {
+//			Integer agentId = entry.getKey();
+//			Integer numReviews = entry.getValue().get(0);
+//			Integer totalRating = entry.getValue().get(1);
+//			Double averageRating = (double)(totalRating) / numReviews;
+//			agentAverageRatings.add(new Pair<>(agentId, averageRating));
+//		}
+//		Collections.sort(entryList, (o1, o2) -> {
+//			if (o1.getValue2() > o2.getValue2()) {
+//				return 1;
+//			} else if (o1.getValue2() < o2.getValue2()) {
+//				return -1;
+//			}
+//			return 0;
+//		});
+//		return agentAverageRatings.get(agentRank - 1).getValue1();
 	}	
 
 	
@@ -252,18 +224,8 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers who’ve filed a claim within the last <numberOfMonths>.
 	 */
 	public List<Customer> getCustomersWithClaims(Map<String, String> csvFilePaths, short monthsOpen) throws IOException {
-		String customerListFilePath = csvFilePaths.get("customerList");
-		String claimsListFilePath = csvFilePaths.get("claimList");
-		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
-		List<Claim> allClaims = readCsvFile(claimsListFilePath, Claim.class);
-		List<Customer> customersWithClaims = new ArrayList<>();
-		for (Claim currentClaim : allClaims) {
-			if (currentClaim.getMonthsOpen() <= monthsOpen) {
-				int currentClaimCustomerId = currentClaim.getCustomerId();
-				customersWithClaims.add(allCustomers.get(currentClaimCustomerId));
-			}
-		}
-		return customersWithClaims;
+		List<Integer> customerIDsWithRecentClaim = readCsvFile(csvFilePaths.get("claimList"), Claim.class).stream().filter(claim -> claim.getMonthsOpen() <= monthsOpen).map(claim -> claim.getCustomerId()).collect(Collectors.toList());
+        return readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customerIDsWithRecentClaim.contains(customer.getCustomerId())).collect(Collectors.toList());
 	}
 
 	/* Custom methods: 1
