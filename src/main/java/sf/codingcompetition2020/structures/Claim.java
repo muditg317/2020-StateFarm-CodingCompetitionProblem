@@ -3,6 +3,7 @@ package sf.codingcompetition2020.structures;
 import java.util.List;
 
 public class Claim {
+
 	private int claimId;
 	private int customerId;
 	private boolean closed;
@@ -140,4 +141,5 @@ public class Claim {
 			return new Claim(this);
 		}
 	}
+
 }

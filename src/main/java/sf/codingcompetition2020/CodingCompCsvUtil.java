@@ -2,11 +2,16 @@ package sf.codingcompetition2020;
 
 import java.io.FileReader;
 import java.io.Reader;
+<<<<<<< HEAD
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import java.lang.reflect.Array;
+import java.util.*;
+>>>>>>> 4a61fb87fd49a14462182806e1412956997e44c9
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -30,6 +35,7 @@ import sf.codingcompetition2020.structures.Agent;
 import sf.codingcompetition2020.structures.Claim;
 import sf.codingcompetition2020.structures.Customer;
 import sf.codingcompetition2020.structures.Vendor;
+import sf.codingcompetition2020.utilities.Pair;
 
 public class CodingCompCsvUtil {
 	
@@ -152,7 +158,17 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers filtered by age, number of vehicles insured and the number of dependents.
 	 */
 	public List<Customer> getUndisclosedDrivers(String filePath, int vehiclesInsured, int dependents) {
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		List<Customer> filteredCustomers = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (current.getAge() >= 40 && current.getAge() <= 50) {
+				if (current.getVehiclesInsured() > vehiclesInsured && current.getDependents().size() <= dependents) {
+					filteredCustomers.add(current);
+				}
+			}
 
+		}
+		return filteredCustomers;
 	}	
 
 
@@ -165,7 +181,44 @@ public class CodingCompCsvUtil {
 	 * @return -- Agent ID of agent with the given rank.
 	 */
 	public int getAgentIdGivenRank(String filePath, int agentRank) {
-			
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		int numberOfAgents = Integer.MIN_VALUE;
+		for (Customer currentCustomer : allCustomers) {
+			numberOfAgents = Math.min(numberOfAgents, currentCustomer.getAgentId());
+		}
+		Map<Integer, List<Integer>> agentRatingsList = new HashMap<>();
+		for (Customer currentCustomer : allCustomers) {
+			int currentAgentId = currentCustomer.getAgentId();
+			int currentAgentRating = currentCustomer.getAgentRating();
+			if (agentRatingsList.containsKey(currentAgentId)) {
+				List<Integer> currentAgentList = agentRatingsList.get(currentAgentId);
+				currentAgentList.set(0, currentAgentList.get(0) + 1);
+				currentAgentList.set(1, currentAgentList.get(1) + currentAgentRating);
+				agentRatingsList.put(currentAgentId, currentAgentList);
+			} else {
+				List<Integer> newAgentList = new ArrayList<>();
+				newAgentList.add(1);
+				newAgentList.add(currentAgentRating);
+				agentRatingsList.put(currentAgentId, newAgentList);
+			}
+		}
+		List<Pair<Integer, Double>> agentAverageRatings = new ArrayList<>();
+		for (Map.Entry<Integer, List<Integer>> entry : agentRatingsList.entrySet()) {
+			Integer agentId = entry.getKey();
+			Integer numReviews = entry.getValue().get(0);
+			Integer totalRating = entry.getValue().get(1);
+			Double averageRating = (double)(totalRating) / numReviews;
+			agentAverageRatings.add(new Pair<>(agentId, averageRating));
+		}
+		Collections.sort(agentAverageRatings, (o1, o2) -> {
+			if (o1.getValue2() > o2.getValue2()) {
+				return 1;
+			} else if (o1.getValue2() > o2.getValue2()) {
+				return -1;
+			}
+			return 0;
+		});
+		return agentAverageRatings.get(agentRank - 1).getValue1();
 	}	
 
 	
@@ -175,8 +228,18 @@ public class CodingCompCsvUtil {
 	 * @param monthsOpen -- Number of months a policy has been open.
 	 * @return -- List of customers who’ve filed a claim within the last <numberOfMonths>.
 	 */
-	public List<Customer> getCustomersWithClaims(Map<String,String> csvFilePaths, short monthsOpen) {
-
-	}	
-
+	public List<Customer> getCustomersWithClaims(Map<String, String> csvFilePaths, short monthsOpen) {
+		String customerListFilePath = csvFilePaths.get("customerList");
+		String claimsListFilePath = csvFilePaths.get("claimList");
+		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
+		List<Claim> allClaims = readCsvFile(claimsListFilePath, Claim.class);
+		List<Customer> customersWithClaims = new ArrayList<>();
+		for (Claim currentClaim : allClaims) {
+			if (currentClaim.getMonthsOpen() <= monthsOpen) {
+				int currentClaimCustomerId = currentClaim.getCustomerId();
+				customersWithClaims.add(allCustomers.get(currentClaimCustomerId));
+			}
+		}
+		return customersWithClaims;
+	}
 }
