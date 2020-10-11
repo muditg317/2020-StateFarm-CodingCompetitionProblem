@@ -1,9 +1,11 @@
-Your team (name of each individual participating):
+Your team (name of each individual participating): Mudit Gupta, Manoj Niverthi
 How many JUnits were you able to get to pass? 
 
 Document and describe any enhancements included to help the judges properly grade your submission.
-	Step 1:
-	Step 2: 
+	Step 1: We used Checkstyle to make sure the code was readable according to publicly agreed upon standards.
+	Step 2: We made all fileIO related methods and tests throw IOException to account for when a file is not found.
+	    If a file is not found, is does not make sense to just return an empty list, as we should instead tell the user that they are attempting to read a non-present file.
+	    We also changed some of the tests to throw the IOException.
 	
 	
 Feedback for the coding competition?  Things you would like to see in future events?

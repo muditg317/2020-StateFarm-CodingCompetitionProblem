@@ -8,6 +8,14 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -27,8 +35,21 @@ public class CodingCompCsvUtil {
 	 * @param classType -- Class of entries being read in.
 	 * @return -- List of entries being returned.
 	 */
-	public <T> List<T> readCsvFile(String filePath, Class<T> classType) {
-
+	public <T> List<T> readCsvFile(String filePath, Class<T> classType) throws IOException {
+		File file = new File(filePath);
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String entry;
+		List<T> interpretedFile = new ArrayList<>();
+		while ((entry = br.readLine()) != null) {
+			List<String> interpretedLine = Arrays.asList(entry.split("\\s*,\\s*"));
+			try {
+				interpretedFile.add(classType.getConstructor(List.class).newInstance());
+			} catch (NoSuchMethodException nsme) {
+				nsme.printStackTrace();
+			}
+		}
+		return interpretedFile;
 	}
 
 	
@@ -38,7 +59,7 @@ public class CodingCompCsvUtil {
 	 * @param area -- The area from which the agents should be counted.
 	 * @return -- The number of agents in a given area
 	 */
-	public int getAgentCountInArea(String filePath,String area) {
+	public int getAgentCountInArea(String filePath, String area) {
 
 	}
 
