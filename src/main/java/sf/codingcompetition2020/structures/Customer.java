@@ -20,7 +20,7 @@ public class Customer {
 	private boolean homePolicy;
 	private boolean autoPolicy;
 	private boolean rentersPolicy;
-	private String totalMonthlyPremium;
+	private int totalMonthlyPremium;
 	private short yearsOfService;
 	private int vehiclesInsured;
 
@@ -40,7 +40,7 @@ public class Customer {
 		this.homePolicy = homePolicy;
 		this.autoPolicy = autoPolicy;
 		this.rentersPolicy = rentersPolicy;
-		this.totalMonthlyPremium = totalMonthlyPremium;
+		this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 		this.yearsOfService = yearsOfService;
 		this.vehiclesInsured = vehiclesInsured;
 	}
@@ -240,7 +240,7 @@ public class Customer {
 	* Returns value of homePolicy
 	* @return
 	*/
-	public boolean isHomePolicy() {
+	public boolean hasHomePolicy() {
 		return homePolicy;
 	}
 
@@ -256,7 +256,7 @@ public class Customer {
 	* Returns value of autoPolicy
 	* @return
 	*/
-	public boolean isAutoPolicy() {
+	public boolean hasAutoPolicy() {
 		return autoPolicy;
 	}
 
@@ -272,7 +272,7 @@ public class Customer {
 	* Returns value of rentersPolicy
 	* @return
 	*/
-	public boolean isRentersPolicy() {
+	public boolean hasRentersPolicy() {
 		return rentersPolicy;
 	}
 
@@ -288,7 +288,7 @@ public class Customer {
 	* Returns value of totalMonthlyPremium
 	* @return
 	*/
-	public String getTotalMonthlyPremium() {
+	public int getTotalMonthlyPremium() {
 		return totalMonthlyPremium;
 	}
 
@@ -297,7 +297,7 @@ public class Customer {
 	* @param
 	*/
 	public void setTotalMonthlyPremium(String totalMonthlyPremium) {
-		this.totalMonthlyPremium = totalMonthlyPremium;
+		this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 	}
 
 	/**
@@ -345,7 +345,7 @@ public class Customer {
 		 private boolean homePolicy;
 		 private boolean autoPolicy;
 		 private boolean rentersPolicy;
-		 private String totalMonthlyPremium;
+		 private int totalMonthlyPremium;
 		 private short yearsOfService;
 		 private int vehiclesInsured;
 
@@ -414,7 +414,7 @@ public class Customer {
 		}
 
 		 public Builder totalMonthlyPremium(String totalMonthlyPremium) {
-			 this.totalMonthlyPremium = totalMonthlyPremium;
+			 this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
 			 return this;
 		}
 

@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.lang.reflect.Array;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -111,7 +111,15 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) {
-		return null;
+		List<Customer> allCustomers = readCsvFile(customerFilePath, Customer.class);
+		List<Customer> retainedCustomers = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (current.getYearsOfService() >= yearsOfService) {
+				retainedCustomers.add(current);
+			}
+		}
+		Collections.sort(retainedCustomers, Comparator.comparingInt(Customer::getTotalMonthlyPremium));
+		return retainedCustomers;
 	}
 
 	
@@ -122,7 +130,14 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers who’ve made an inquiry for a policy but have not signed up.
 	 */
 	public List<Customer> getLeadsForInsurance(String filePath) {
-		return null;
+		List<Customer> allCustomers = readCsvFile(filePath, Customer.class);
+		List<Customer> customersWithoutPolicy = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (!current.hasAutoPolicy() && !current.hasHomePolicy() && !current.hasRentersPolicy()) {
+				customersWithoutPolicy.add(current);
+			}
+		}
+		return customersWithoutPolicy;
 	}
 
 
@@ -137,7 +152,20 @@ public class CodingCompCsvUtil {
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
 	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) {
-        return null;
+		List<Vendor> allVendors = readCsvFile(filePath, Vendor.class);
+		List<Vendor> narrowedVendors = new ArrayList<>();
+		for (Vendor current : allVendors) {
+			if (current.getVendorRating() == vendorRating && area.equals(current.getArea())) {
+				if (inScope) {
+					if (current.isInScope()) {
+						narrowedVendors.add(current);
+					}
+				} else {
+					narrowedVendors.add(current);
+				}
+			}
+		}
+		return narrowedVendors;
 	}
 
 
@@ -159,7 +187,6 @@ public class CodingCompCsvUtil {
 					filteredCustomers.add(current);
 				}
 			}
-
 		}
 		return filteredCustomers;
 	}	
@@ -206,7 +233,7 @@ public class CodingCompCsvUtil {
 		Collections.sort(agentAverageRatings, (o1, o2) -> {
 			if (o1.getValue2() > o2.getValue2()) {
 				return 1;
-			} else if (o1.getValue2() > o2.getValue2()) {
+			} else if (o1.getValue2() < o2.getValue2()) {
 				return -1;
 			}
 			return 0;
