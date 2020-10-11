@@ -250,7 +250,7 @@ public class CodingCompCsvUtil {
 	}
 
 	/* Custom methods: 1
-	 * getCustomersWithClaims() -- Return a list of customers who have <numberOfPolicies> policies (inclusive).
+	 * getCustomersBasedOnNumberOfPolicies() -- Return a list of customers who have <numberOfPolicies> policies (inclusive).
 	 * @param filePath -- Path to file being read in.
 	 * @param numberOfPolicies -- Number of months a policy has been open.
 	 * @return -- List of customers who have <numberOfPolicies> policies.
@@ -269,5 +269,33 @@ public class CodingCompCsvUtil {
 			}
 			return policyCount == numberOfPolicies;
 		}).collect(Collectors.toList());
+	}
+
+	/* Custom methods: 2
+	 * getVendorsForCustomerBasedOnArea() -- Return a list of vendors that operate in the area of a given customer.
+	 * @param csvFilePaths -- Paths to files being read in.
+	 * @param firstName -- last name of customer
+	 * @param lastName -- first name of customer
+	 * @return -- list of vendors that operate in the area of a given customer
+	 */
+	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String firstName, String lastName) {
+		String customerListFilePath = csvFilePaths.get("customerList");
+		String vendorListFilePath = csvFilePaths.get("vendorFilePath");
+		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);
+		List<Vendor> allVendors = readCsvFile(vendorListFilePath, Vendor.class);
+		String desiredArea = "";
+		List<Vendor> vendorsInArea = new ArrayList<>();
+		for (Customer current : allCustomers) {
+			if (current.getFirstName().equals(firstName) && current.getLastName().equals(lastName)) {
+				desiredArea = current.getArea();
+				break;
+			}
+		}
+		for (Vendor current : allVendors) {
+			if (current.getArea().equals(desiredArea)) {
+				vendorsInArea.add(current);
+			}
+		}
+		return vendorsInArea;
 	}
 }
