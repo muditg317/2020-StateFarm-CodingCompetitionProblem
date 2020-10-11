@@ -1,5 +1,5 @@
 Your team (name of each individual participating): Mudit Gupta, Manoj Niverthi
-How many JUnits were you able to get to pass? 
+How many JUnits were you able to get to pass? 10
 
 Document and describe any enhancements included to help the judges properly grade your submission.
 	Step 1: We used Checkstyle to make sure the code was readable according to publicly agreed upon standards.
@@ -9,6 +9,8 @@ Document and describe any enhancements included to help the judges properly grad
 	Step 3: We noticed that the vehiclesInsured field was unnecessarily declared as an Integer in the Customer class, so we converted it to an int.
 	Step 4: The Customer class was using a String for the totalMonthlyPremium because of a dollar sign, so we converted it to an int.
 	    This makes future use of the value much more intuitive and meaningful.
+	    We also updated the test values in the JUnit to reflect the better implementation.
+	Step 5:
 	
 	
 Feedback for the coding competition?  Things you would like to see in future events?

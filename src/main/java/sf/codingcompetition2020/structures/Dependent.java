@@ -70,6 +70,14 @@ public class Dependent {
 		this.lastName = lastName;
 	}
 
+	@Override
+	public String toString() {
+		return "Dependent{" +
+				"firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				'}';
+	}
+
 	public static class Builder {
 		 private String firstName;
 		 private String lastName;

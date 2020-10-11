@@ -75,10 +75,10 @@ public class CodingCompCsvUtilTest{
 		assertEquals(15,customerList.size());
 		assertEquals(215,customerList.get(0).getCustomerId());
 		assertEquals(5,customerList.get(2).getYearsOfService());
-		assertEquals("$388",customerList.get(3).getTotalMonthlyPremium());
+		assertEquals(388,customerList.get(3).getTotalMonthlyPremium());
 		assertEquals("Janka",customerList.get(4).getFirstName());
 		assertEquals("Tesoe",customerList.get(5).getLastName());
-		assertEquals("$888",customerList.get(14).getTotalMonthlyPremium());
+		assertEquals(888,customerList.get(14).getTotalMonthlyPremium());
 	}
 	
 	//#6

@@ -9,6 +9,16 @@ public class Vendor {
 	private boolean inScope;
 
 	/**
+	* Default Vendor constructor
+	*/
+	public Vendor(int vendorId, String area, int vendorRating, boolean inScope) {
+		this.vendorId = vendorId;
+		this.area = area;
+		this.vendorRating = vendorRating;
+		this.inScope = inScope;
+	}
+
+	/**
 	 * constructor based on an entry in a CSV
 	 * @param csvEntry
 	 */
@@ -18,15 +28,6 @@ public class Vendor {
 				csvEntry.get(1),
 				Integer.parseInt(csvEntry.get(2)),
 				Boolean.parseBoolean(csvEntry.get(3)));
-	}
-	/**
-	* Default Vendor constructor
-	*/
-	public Vendor(int vendorId, String area, int vendorRating, boolean inScope) {
-		this.vendorId = vendorId;
-		this.area = area;
-		this.vendorRating = vendorRating;
-		this.inScope = inScope;
 	}
 
 	/**
@@ -103,6 +104,16 @@ public class Vendor {
 	*/
 	public void setInScope(boolean inScope) {
 		this.inScope = inScope;
+	}
+
+	@Override
+	public String toString() {
+		return "Vendor{" +
+				"vendorId=" + vendorId +
+				", area='" + area + '\'' +
+				", vendorRating=" + vendorRating +
+				", inScope=" + inScope +
+				'}';
 	}
 
 	public static class Builder {
