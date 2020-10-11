@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 public class Customer {
+
 	private int customerId;
 	private String firstName;
 	private String lastName;
@@ -49,7 +52,7 @@ public class Customer {
 	 * constructor based on an entry in a CSV
 	 * @param csvEntry
 	 */
-	public Customer(List<String> csvEntry) {
+	public Customer(List<String> csvEntry) throws JsonProcessingException {
 		this(
 				Integer.parseInt(csvEntry.get(0)),
 				csvEntry.get(1),
@@ -59,7 +62,7 @@ public class Customer {
 				Integer.parseInt(csvEntry.get(5)),
 				Short.parseShort(csvEntry.get(6)),
 				csvEntry.get(7),
-				(List<Dependent>)(Object)csvEntry.get(8),
+				csvEntry.get(8).isEmpty() ? new ArrayList<>() : new ObjectMapper().readValue(csvEntry.get(8), new TypeReference<List<Dependent>>(){}),
 				Boolean.parseBoolean(csvEntry.get(9)),
 				Boolean.parseBoolean(csvEntry.get(10)),
 				Boolean.parseBoolean(csvEntry.get(11)),
@@ -345,7 +348,7 @@ public class Customer {
 		 private boolean homePolicy;
 		 private boolean autoPolicy;
 		 private boolean rentersPolicy;
-		 private int totalMonthlyPremium;
+		 private String totalMonthlyPremium;
 		 private short yearsOfService;
 		 private int vehiclesInsured;
 
@@ -414,7 +417,7 @@ public class Customer {
 		}
 
 		 public Builder totalMonthlyPremium(String totalMonthlyPremium) {
-			 this.totalMonthlyPremium = Integer.parseInt(totalMonthlyPremium.substring(1));
+			 this.totalMonthlyPremium = totalMonthlyPremium;
 			 return this;
 		}
 

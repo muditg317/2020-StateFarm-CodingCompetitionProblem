@@ -44,6 +44,7 @@ public class CodingCompCsvUtil {
 		CsvMapper mapper = new CsvMapper();
 		mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
 		MappingIterator<Object[]> it = mapper.readerFor(Object[].class).readValues(csvFile);
+		it.nextValue();
 		it.forEachRemaining(row -> {
 			try {
 				interpretedFile.add(classType.getConstructor(List.class).newInstance(Arrays.asList(row)));
@@ -51,7 +52,9 @@ public class CodingCompCsvUtil {
 				e.printStackTrace();
 			}
 		});
+		if (classType.equals(Customer.class)) {
 
+		}
 //		FileReader fr = new FileReader(csvFile);
 //		BufferedReader br = new BufferedReader(fr);
 //		String entry;
@@ -269,7 +272,7 @@ public class CodingCompCsvUtil {
 	 * @param numberOfPolicies -- Number of months a policy has been open.
 	 * @return -- List of customers who have <numberOfPolicies> policies.
 	 */
-	public List<Customer> getCustomersBasedOnNumberOfPolicies(String filePath, int numberOfPolicies) {
+	public List<Customer> getCustomersBasedOnNumberOfPolicies(String filePath, int numberOfPolicies) throws IOException {
 		return readCsvFile(filePath, Customer.class).stream().filter(customer -> {
 			int policyCount = 0;
 			if (customer.hasAutoPolicy()) {
@@ -292,7 +295,7 @@ public class CodingCompCsvUtil {
 	 * @param lastName -- first name of customer
 	 * @return -- list of vendors that operate in the area of a given customer
 	 */
-	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String firstName, String lastName) {
+	public List<Vendor> getVendorsForCustomerBasedOnArea(Map<String, String> csvFilePaths, String firstName, String lastName) throws IOException {
 		String customerListFilePath = csvFilePaths.get("customerList");
 		String vendorListFilePath = csvFilePaths.get("vendorFilePath");
 		List<Customer> allCustomers = readCsvFile(customerListFilePath, Customer.class);

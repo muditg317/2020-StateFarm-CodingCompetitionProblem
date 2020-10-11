@@ -68,7 +68,7 @@ public class CodingCompCsvUtilTest{
 	
 	//#5
 	@Test
-	public void getCustomersRetainedForYearsByPlcyCostAsc() {
+	public void getCustomersRetainedForYearsByPlcyCostAsc() throws IOException {
 		List<Customer> customerList = codingCompCsVUtil.getCustomersRetainedForYearsByPlcyCostAsc(customerFilePath, Short.valueOf("5"));
 		
 		assertEquals(15,customerList.size());
@@ -82,13 +82,13 @@ public class CodingCompCsvUtilTest{
 	
 	//#6
 	@Test
-	public void getLeadsForInsurance() {
+	public void getLeadsForInsurance() throws IOException {
 		assertEquals(82, codingCompCsVUtil.getLeadsForInsurance(customerFilePath).size());
 	}
 	
 	//#7
 	@Test
-	public void getVendorsWithGivenRatingThatAreInScope() {
+	public void getVendorsWithGivenRatingThatAreInScope() throws IOException {
 		assertEquals(11, codingCompCsVUtil.getVendorsWithGivenRatingThatAreInScope(vendorFilePath, "area-5", true, 4).size());
 		assertEquals(2, codingCompCsVUtil.getVendorsWithGivenRatingThatAreInScope(vendorFilePath, "area-2", true, 2).size());
 		assertEquals(12, codingCompCsVUtil.getVendorsWithGivenRatingThatAreInScope(vendorFilePath, "area-3", false, 3).size());

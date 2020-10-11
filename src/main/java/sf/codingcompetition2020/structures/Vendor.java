@@ -1,11 +1,24 @@
 package sf.codingcompetition2020.structures;
 
+import java.util.List;
+
 public class Vendor {
 	private int vendorId;
 	private String area;
 	private int vendorRating;
 	private boolean inScope;
 
+	/**
+	 * constructor based on an entry in a CSV
+	 * @param csvEntry
+	 */
+	public Vendor(List<String> csvEntry) {
+		this(
+				Integer.parseInt(csvEntry.get(0)),
+				csvEntry.get(1),
+				Integer.parseInt(csvEntry.get(2)),
+				Boolean.parseBoolean(csvEntry.get(3)));
+	}
 	/**
 	* Default Vendor constructor
 	*/

@@ -1,9 +1,27 @@
 package sf.codingcompetition2020.structures;
 
+import java.util.List;
+
 public class Dependent {
 	private String firstName;
 	private String lastName;
 
+	/**
+	 *
+	 */
+	public Dependent() {
+		super();
+	}
+	/**
+	 * constructor based on an entry in a CSV
+	 * @param csvEntry
+	 */
+	public Dependent(List<String> csvEntry) {
+		this(
+				csvEntry.get(0),
+				csvEntry.get(1)
+		);
+	}
 	/**
 	* Default Dependent constructor
 	*/
