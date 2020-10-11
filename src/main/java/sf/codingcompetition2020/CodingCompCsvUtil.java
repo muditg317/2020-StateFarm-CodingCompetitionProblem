@@ -102,7 +102,7 @@ public class CodingCompCsvUtil {
 	 * @return -- The number of customers that use a certain agent in a given area.
 	 */
 	public short countCustomersFromAreaThatUseAgent(Map<String,String> csvFilePaths, String customerArea, String agentFirstName, String agentLastName) throws IOException {
-	    Agent desiredAgent = (Agent) readCsvFile(csvFilePaths.get("agentList"), Agent.class).stream().filter(agent -> agent.getFirstName().equals(agentFirstName) && agent.getLanguage().equals(agentLastName)).toArray()[0];
+	    Agent desiredAgent = (Agent) readCsvFile(csvFilePaths.get("agentList"), Agent.class).stream().filter(agent -> agent.getFirstName().equals(agentFirstName) && agent.getLastName().equals(agentLastName)).toArray()[0];
 		return (short) readCsvFile(csvFilePaths.get("customerList"), Customer.class).stream().filter(customer -> customer.getArea().equals(customerArea) && customer.getAgentId() == desiredAgent.getAgentId()).count();
 	}
 
@@ -114,7 +114,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of customers retained for a given number of years, in ascending order of policy cost.
 	 */
 	public List<Customer> getCustomersRetainedForYearsByPlcyCostAsc(String customerFilePath, short yearsOfService) throws IOException {
-		return readCsvFile(customerFilePath, Customer.class).stream().filter(customer -> customer.getYearsOfService() >= yearsOfService).sorted(Comparator.comparingInt(Customer::getTotalMonthlyPremium)).collect(Collectors.toList());
+		return readCsvFile(customerFilePath, Customer.class).stream().filter(customer -> customer.getYearsOfService() == yearsOfService).sorted(Comparator.comparingInt(Customer::getTotalMonthlyPremium)).collect(Collectors.toList());
 	}
 
 	
@@ -140,7 +140,7 @@ public class CodingCompCsvUtil {
 	 * @return -- List of vendors within a given area, filtered by scope and vendor rating.
 	 */
 	public List<Vendor> getVendorsWithGivenRatingThatAreInScope(String filePath, String area, boolean inScope, int vendorRating) throws IOException {
-		return readCsvFile(filePath, Vendor.class).stream().filter(vendor -> vendor.getVendorRating() == vendorRating && vendor.getArea().equals(area) && (!inScope || vendor.isInScope())).collect(Collectors.toList());
+		return readCsvFile(filePath, Vendor.class).stream().filter(vendor -> vendor.getArea().equals(area) && vendor.getVendorRating() >= vendorRating && (!inScope || vendor.isInScope())).collect(Collectors.toList());
 	}
 
 
@@ -188,6 +188,14 @@ public class CodingCompCsvUtil {
 				agentRatingsMap.put(currentAgentId, newAgentList);
 			}
 		}
+		System.out.println(agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
+			if (agent1.getValue2() > agent2.getValue2()) {
+				return 1;
+			} else if (agent1.getValue2() < agent2.getValue2()) {
+				return -1;
+			}
+			return 0;
+		}).collect(Collectors.toList()));
         return ((Pair<Integer, Double>) agentRatingsMap.entrySet().stream().map(entry -> new Pair<Integer, Double>(entry.getKey(), entry.getValue().stream().mapToInt(rating -> rating).summaryStatistics().getAverage())).sorted((agent1, agent2) -> {
                     if (agent1.getValue2() > agent2.getValue2()) {
                         return 1;

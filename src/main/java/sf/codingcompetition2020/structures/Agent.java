@@ -127,6 +127,17 @@ public class Agent {
 		this.lastName = lastName;
 	}
 
+	@Override
+	public String toString() {
+		return "Agent{" +
+				"agentId=" + agentId +
+				", area='" + area + '\'' +
+				", language='" + language + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				'}';
+	}
+
 	public static class Builder {
 		private int agentId;
 		private String area;

@@ -335,6 +335,27 @@ public class Customer {
 		this.vehiclesInsured = vehiclesInsured;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"customerId=" + customerId +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", age=" + age +
+				", area='" + area + '\'' +
+				", agentId=" + agentId +
+				", agentRating=" + agentRating +
+				", primaryLanguage='" + primaryLanguage + '\'' +
+				", dependents=" + dependents +
+				", homePolicy=" + homePolicy +
+				", autoPolicy=" + autoPolicy +
+				", rentersPolicy=" + rentersPolicy +
+				", totalMonthlyPremium=" + totalMonthlyPremium +
+				", yearsOfService=" + yearsOfService +
+				", vehiclesInsured=" + vehiclesInsured +
+				'}';
+	}
+
 	public static class Builder {
 		 private int customerId;
 		 private String firstName;

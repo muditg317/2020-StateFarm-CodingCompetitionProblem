@@ -107,6 +107,16 @@ public class Claim {
 		this.monthsOpen = monthsOpen;
 	}
 
+	@Override
+	public String toString() {
+		return "Claim{" +
+				"claimId=" + claimId +
+				", customerId=" + customerId +
+				", closed=" + closed +
+				", monthsOpen=" + monthsOpen +
+				'}';
+	}
+
 	public static class Builder {
 		 private int claimId;
 		 private int customerId;
